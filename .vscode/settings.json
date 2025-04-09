@@ -18,5 +18,22 @@
     "titleBar.inactiveBackground": "#86d3ea99",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "peacock.color": "#86d3ea"
+  "peacock.color": "#86d3ea",
+
+  // Format on Save settings
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll": true
+  },
+
+  // C# specific settings
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  },
+
+  // Enable .editorconfig support
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false
 }
