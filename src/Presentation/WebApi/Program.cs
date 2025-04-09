@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Application.Common;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add application services
-// builder.Services.AddApplication();
-// builder.Services.AddInfrastructure(builder.Configuration);
+var mediator = new SimpleMediator();
+
+// Register handlers from both WebApi and Application assemblies
+mediator.RegisterHandlersFromAssembly(Assembly.GetExecutingAssembly());
+mediator.RegisterHandlersFromAssembly(Assembly.Load("Application"));
+
+builder.Services.AddSingleton<IMediator>(mediator);
 
 var app = builder.Build();
 

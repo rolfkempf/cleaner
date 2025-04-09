@@ -1,6 +1,4 @@
-using Domain.Entities;
-
-namespace Application.Queries
+namespace Application.Features.Dummy.Queries
 {
     public class GetDummiesQuery
     {

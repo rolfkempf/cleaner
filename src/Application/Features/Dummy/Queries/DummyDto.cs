@@ -1,15 +1,13 @@
-namespace Application.DTOs
+namespace Application.Features.Dummy.Queries
 {
     public class DummyDto
     {
-        public int Id { get; set; } // Assuming you have an Id property in your domain entity
         public string Name { get; set; }
         public string Gender { get; set; }
         public int Age { get; set; } // Calculated from Birthday
 
         public DummyDto(string name, string gender, int age)
         {
-
             Name = name;
             Gender = gender;
             Age = age;

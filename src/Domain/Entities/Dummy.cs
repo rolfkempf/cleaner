@@ -6,5 +6,12 @@ namespace Domain.Entities
         public string Name { get; set; }
         public DateTime Birthday { get; set; }
         public string Gender { get; set; }
+
+        public Dummy(string name, DateTime birthday, string gender)
+        {
+            Name = name;
+            Birthday = birthday;
+            Gender = gender;
+        }
     }
 }

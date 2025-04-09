@@ -1,5 +1,6 @@
-using Application.Queries;
-using Application.DTOs;
+using Application.Features.Dummy.Queries;
+using Application.Features.Dummy.Commands;
+using Application.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -8,25 +9,26 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class DummyController : ControllerBase
     {
-        private readonly GetDummiesQueryHandler _queryHandler;
+        private readonly IMediator _mediator;
 
-        public DummyController()
+        public DummyController(IMediator mediator)
         {
-            _queryHandler = new GetDummiesQueryHandler();
+            _mediator = mediator;
         }
 
         [HttpGet]
         public IActionResult GetDummies()
         {
             var query = new GetDummiesQuery();
-            var dummies = _queryHandler.Handle(query);
-            var dummyDtos = dummies.Select(d => new DummyDto
-            {
-                Id = d.Id,
-                Name = d.Name
-            }).ToList();
+            var dummies = _mediator.Send<GetDummiesQuery, List<DummyDto>>(query);
+            return Ok(dummies);
+        }
 
-            return Ok(dummyDtos);
+        [HttpPost]
+        public IActionResult CreateDummy([FromBody] CreateDummyRequest request)
+        {
+            // For now, just return the received request as a confirmation
+            return CreatedAtAction(nameof(GetDummies), new { id = Guid.NewGuid() }, request);
         }
     }
 }
