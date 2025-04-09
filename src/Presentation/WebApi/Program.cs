@@ -10,14 +10,32 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Add application services
-var mediator = new SimpleMediator();
+// Register all query and command handlers as services
+Assembly applicationAssembly = Assembly.Load("Application");
+var handlerTypes = applicationAssembly.GetTypes()
+    .Where(t => t.IsClass && !t.IsAbstract &&
+                (t.GetInterfaces().Any(i => i.IsGenericType &&
+                    (i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>) ||
+                     i.GetGenericTypeDefinition() == typeof(IAsyncQueryHandler<,>) ||
+                     i.GetGenericTypeDefinition() == typeof(ICommandHandler<>) ||
+                     i.GetGenericTypeDefinition() == typeof(IAsyncCommandHandler<>)))));
 
-// Register handlers from both WebApi and Application assemblies
-mediator.RegisterHandlersFromAssembly(Assembly.GetExecutingAssembly());
-mediator.RegisterHandlersFromAssembly(Assembly.Load("Application"));
+foreach (var handlerType in handlerTypes)
+{
+    builder.Services.AddTransient(handlerType);
+}
 
-builder.Services.AddSingleton<IMediator>(mediator);
+// Register the mediator as a singleton with dependency injection
+builder.Services.AddSingleton<IMediator>(serviceProvider =>
+{
+    var mediator = new SimpleMediator(serviceProvider);
+
+    // Register handlers from both WebApi and Application assemblies
+    mediator.RegisterHandlersFromAssembly(Assembly.GetExecutingAssembly());
+    mediator.RegisterHandlersFromAssembly(applicationAssembly);
+
+    return mediator;
+});
 
 var app = builder.Build();
 
