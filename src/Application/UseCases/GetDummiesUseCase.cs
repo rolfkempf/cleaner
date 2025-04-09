@@ -1,1 +1,0 @@
-// This file is no longer needed as the functionality has been refactored into the Queries folder.
