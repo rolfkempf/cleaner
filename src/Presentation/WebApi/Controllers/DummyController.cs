@@ -1,3 +1,5 @@
+using Application.Queries;
+using Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -6,10 +8,25 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class DummyController : ControllerBase
     {
-        [HttpGet("test")]
-        public IActionResult GetTest()
+        private readonly GetDummiesQueryHandler _queryHandler;
+
+        public DummyController()
         {
-            return Ok(new { Message = "This is a dummy endpoint." });
+            _queryHandler = new GetDummiesQueryHandler();
+        }
+
+        [HttpGet]
+        public IActionResult GetDummies()
+        {
+            var query = new GetDummiesQuery();
+            var dummies = _queryHandler.Handle(query);
+            var dummyDtos = dummies.Select(d => new DummyDto
+            {
+                Id = d.Id,
+                Name = d.Name
+            }).ToList();
+
+            return Ok(dummyDtos);
         }
     }
 }

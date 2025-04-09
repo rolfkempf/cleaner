@@ -27,3 +27,11 @@ public class Customer : BaseEntity
 ```
 
 Keep entities focused on domain behavior rather than data persistence concerns.
+
+# Dummy Entity
+
+The `Dummy` entity represents a person with the following properties:
+
+- `Name` (string): The name of the person.
+- `Birthday` (DateTime): The date of birth of the person.
+- `Gender` (string): The gender of the person.

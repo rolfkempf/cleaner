@@ -36,3 +36,7 @@ UseCases/
 ```
 
 This organization makes it easy to locate use cases and understand the available system operations.
+
+# Dummy Use Case
+
+This use case retrieves a list of `Dummy` entities.
